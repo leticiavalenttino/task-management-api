@@ -3,6 +3,7 @@ package com.leticia.api_tarefas.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,8 +75,9 @@ public class TarefaController {
     return tarefaService.buscarPorCategoria(categoria);
     }
     @PostMapping
-    public Tarefa criar(@Valid @RequestBody Tarefa tarefa) {
-    return tarefaService.criar(tarefa);
+    public ResponseEntity<Tarefa> criar(@Valid @RequestBody Tarefa tarefa) {
+    Tarefa novaTarefa = tarefaService.criar(tarefa);
+    return ResponseEntity.status(HttpStatus.CREATED).body(novaTarefa);
     }
     @GetMapping("/resumo")
     public TarefaResumo resumo() {

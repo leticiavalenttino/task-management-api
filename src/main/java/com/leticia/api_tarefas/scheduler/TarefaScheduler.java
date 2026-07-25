@@ -17,7 +17,7 @@ public class TarefaScheduler {
     @Autowired
     private TarefaRepository tarefaRepository;
 
-    @Scheduled(fixedRate = 21600000)
+    @Scheduled(fixedRate = 15000)
     @Transactional
     public void marcarTarefasAtrasadas() {
         LocalDateTime agora = LocalDateTime.now();
