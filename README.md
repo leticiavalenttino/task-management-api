@@ -1,32 +1,29 @@
+# API de Gerenciamento de Tarefas
+Este foi o meu primeiro projeto utilizando Spring Boot: uma API REST para gerenciar tarefas, com CRUD, categorização, validação de dados e um Job agendado que marca tarefas como atrasadas automaticamente.
 
-# API de Gerenciamento de Tarefas (Task Management API)
-
-API REST desenvolvida em Java com Spring Boot para gerenciamento de tarefas, com suporte a categorização, priorização, verificação automática de atrasos e geração de resumos estatísticos.
+Fiz esse projeto pra praticar arquitetura em camadas na prática (não só na teoria) e entender melhor como o Spring Boot organiza responsabilidades entre controller, service e repository.
 
 ## Tecnologias
-
-- **Java**
-- **Spring Boot**
-- **Spring Data JPA**
-- **MySQL**
-- **Spring Scheduler** (verificação automática de tarefas atrasadas)
-- **Bean Validation** (validação de dados de entrada)
-- **Postman** (testes manuais dos endpoints)
+- Java
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- Spring Scheduler (usado para verificação automática de tarefas atrasadas)
+- Bean Validation
+- Postman (usei pra testar todos os endpoints manualmente)
 
 ## Funcionalidades
-
 - CRUD completo de tarefas (criar, listar, buscar por id, atualizar, excluir)
-- Marcação de tarefas como concluídas
-- Categorização por **prioridade** (enum: `BAIXA`, `MEDIA`, `ALTA`) e **categoria** (texto livre)
-- Busca de tarefas por título, prioridade e categoria
-- Verificação automática de tarefas atrasadas via job agendado (`@Scheduled`)
-- Reset automático do status de atraso ao concluir uma tarefa ou atualizar seu prazo
+- Marcar tarefa como concluída
+- Categorização por prioridade (enum: `BAIXA`, `MEDIA`, `ALTA`) e por categoria (texto livre)
+- Busca por título, prioridade e categoria
+- Job agendado que verifica tarefas com prazo vencido e marca como atrasadas — esse foi meu primeiro contato com `@Scheduled` no Spring
+- Reset automático do status de atraso quando a tarefa é concluída ou o prazo é atualizado para uma data futura
 - Endpoint de resumo com estatísticas (total, concluídas, pendentes, atrasadas)
 - Validação de dados de entrada com mensagens de erro claras
-- Tratamento global de exceções (`@ControllerAdvice`)
+- Tratamento global de exceções com `@ControllerAdvice`
 
 ## Estrutura do projeto
-
 ```
 src/main/java/com/leticia/api_tarefas/
 ├── controller/       # Endpoints REST
@@ -37,10 +34,7 @@ src/main/java/com/leticia/api_tarefas/
 └── exception/        # Tratamento global de exceções
 ```
 
-A separação em camadas (Controller → Service → Repository) segue a arquitetura padrão de aplicações Spring Boot, facilitando manutenção e testes.
-
 ## Endpoints principais
-
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | POST | `/api/tarefas` | Cria uma nova tarefa |
@@ -51,24 +45,18 @@ A separação em camadas (Controller → Service → Repository) segue a arquite
 | DELETE | `/api/tarefas/{id}` | Remove uma tarefa |
 | GET | `/api/tarefas/resumo` | Retorna estatísticas (total, concluídas, pendentes, atrasadas) |
 
-> Confira o `TarefaController.java` para a lista completa de rotas de busca (por título, prioridade e categoria).
+Tem mais rotas de busca (por título, prioridade e categoria) — é possível ver todas no `TarefaController.java`.
 
-## Como rodar o projeto localmente
-
-### Pré-requisitos
-- Java JDK instalado
-- MySQL instalado e rodando
-- Maven (o projeto já inclui o wrapper `mvnw`)
-
-### Passos
+## Como rodar localmente
+Pré-requisitos: Java JDK, MySQL rodando na máquina, e o Maven (o projeto já inclui o wrapper `mvnw`, então não precisa instalar separado).
 
 1. Clone o repositório:
 ```bash
-git clone <url-do-seu-repositorio>
-cd api-tarefas
+git clone https://github.com/leticiavalenttino/task-management-api.git
+cd task-management-api
 ```
 
-2. Configure o banco de dados no arquivo `src/main/resources/application.properties`:
+2. Crie o banco de dados no MySQL e configure a conexão em `src/main/resources/application.properties` (use o `application.properties.example` como base):
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/nome_do_banco
 spring.datasource.username=seu_usuario
@@ -76,31 +64,19 @@ spring.datasource.password=sua_senha
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-3. Execute a aplicação:
+3. Execute:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-4. A API estará disponível em:
-```
-http://localhost:8080/api/tarefas
-```
+4. A API fica disponível em `http://localhost:8080/api/tarefas`
 
-## Testando com Postman
-
-Todos os endpoints foram testados manualmente com Postman, incluindo:
-- Criação e validação de tarefas com dados inválidos
-- Verificação do job agendado marcando tarefas como atrasadas
-- Reset do status de atraso ao concluir tarefas ou atualizar prazos
-
-*(Adicione aqui prints do Postman mostrando requisições e respostas)*
+## Testando
+Testei todos os endpoints manualmente com o Postman: criação e validação com dados inválidos, o Job agendado marcando tarefas atrasadas, e o reset desse status ao concluir ou atualizar o prazo.
 
 ## Próximos passos
+Ainda quero adicionar testes automatizados com JUnit e talvez documentar os endpoints com Swagger. Autenticação com JWT é outra coisa que pretendo estudar e aplicar em uma próxima versão.
+Além disso, penso em usar este projeto como base de um pequeno site que controla o estoque de uma clínica, automatizando pedidos quando necessário e possível.
 
-- Adicionar testes automatizados (JUnit)
-- Documentação com Swagger/OpenAPI
-- Autenticação e autorização (JWT)
-
-## Autora
-
-Desenvolvido por Letícia Valentino como projeto de portfólio, aplicando conceitos de arquitetura em camadas, boas práticas REST e agendamento de tarefas com Spring Boot.
+## Sobre
+Projeto feito estudando Java e Spring Boot por conta própria, durante o período de férias da faculdade — ainda não tive esse conteúdo nas disciplinas do curso. Foi minha primeira vez estruturando um projeto Spring Boot do zero, com validação, tratamento de erros e agendamento de tarefas.
